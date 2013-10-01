@@ -39,14 +39,15 @@ qemudbg: main.bin
 	$(QEMU_STM32) -M stm32-p103 \
 		-gdb tcp::3333 -S \
 		-kernel main.bin
-gdbauto: main.bin
+gdbauto:main.bin 
 	$(QEMU_STM32) -M stm32-p103 \
 		-gdb tcp::3333 -S \
 		-kernel main.bin -monitor null &
-	$(CROSS_COMPILE)gdb -x gdb.in
+	$(CROSS_COMPILE)gdb -x gdb.in 
+	bash run.sh
 
 emu: main.bin
 	bash emulate.sh main.bin
 
 clean:
-	rm -f *.elf *.bin *.list
+	rm -f *.elf *.bin *.list *.txt

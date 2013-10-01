@@ -2,7 +2,7 @@ file main.elf
 target remote :3333
 set $osp = $sp
 set $sp = $sp - 16
-b main.c:4
+b main.c:5
 c
 call RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO, ENABLE)
 call RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE)
@@ -23,9 +23,25 @@ set ((USART_InitTypeDef*)$osp)->USART_Mode = USART_Mode_Rx | USART_Mode_Tx
 call USART_Init(USART2, $osp)
 call USART_Cmd(USART2, ENABLE)
 c
-call USART_SendData(USART2, 'H')
-call USART_SendData(USART2, 'e')
-call USART_SendData(USART2, 'l')
-call USART_SendData(USART2, 'l')
-call USART_SendData(USART2, 'o')
-call USART_SendData(USART2, '!')
+
+set variable $str_mem = str
+while((*(char *)$str_mem) != '\0')
+	call USART_SendData(USART2, (*(char *)$str_mem))
+
+	#append mem that send to uart for print
+	append value mem.txt (*(char *)$str_mem)
+	set $str_mem = $str_mem + 1
+
+end
+
+#save the str in gdb session
+set logging on
+printf "%s",str
+set logging off
+
+quit
+
+
+
+
+
