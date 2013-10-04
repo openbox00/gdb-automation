@@ -4,18 +4,11 @@ pkill -9 qemu-system-arm
 #compare gdb.txt and mem.txt context
 cmp gdb.txt mem.txt
 
-
 if [ "$?" == "0" ] ; then
-	echo "the uart and mem are "
-	cat gdb.txt
-	echo ""
+	printf "the uart and mem are %s\n" $(cat gdb.txt)
+
 else
-	echo "error"
-	echo "mem is "
-	cat mem.txt
-	echo "\ngdb is"
-	cat gdb.txt
-	echo ""
+	printf "error:mem is %s, gdb is %s\n" $(cat mem.txt) $(cat gdb.txt)
 fi
  
 
